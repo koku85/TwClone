@@ -25,7 +25,9 @@ class TweetsController < ApplicationController
   # POST /tweets.json
   def create
     @tweet = Tweet.new(tweet_params)
-
+    if params[:back]
+          render :new
+    else
     respond_to do |format|
       if @tweet.save
         format.html { redirect_to @tweet, notice: 'Tweet was successfully created.' }
@@ -34,6 +36,7 @@ class TweetsController < ApplicationController
         format.html { render :new }
         format.json { render json: @tweet.errors, status: :unprocessable_entity }
       end
+    end
     end
   end
 
@@ -49,6 +52,10 @@ class TweetsController < ApplicationController
         format.json { render json: @tweet.errors, status: :unprocessable_entity }
       end
     end
+  end
+  def confirm
+    @tweet = Tweet.new(tweet_params)
+    render :new if @tweet.invalid?
   end
 
   # DELETE /tweets/1
